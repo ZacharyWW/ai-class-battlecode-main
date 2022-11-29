@@ -18,6 +18,7 @@ public strictfp class RobotPlayer {
      */
     static int turnCount = 0;
 
+
     /**
      * A random number generator.
      * We will use this RNG to make some random moves. The Random class is provided by the java.util.Random
@@ -61,6 +62,7 @@ public strictfp class RobotPlayer {
             // loop, we call Clock.yield(), signifying that we've done everything we want to do.
 
             turnCount += 1;  // We have now been alive for one more turn!
+
             System.out.println("Age: " + turnCount + "; Location: " + rc.getLocation());
 
             // Try/catch blocks stop unhandled exceptions, which cause your robot to explode.
@@ -111,28 +113,30 @@ public strictfp class RobotPlayer {
         Direction dir = directions[rng.nextInt(directions.length)];
         int rand = (int) (Math.random()*4);
 
-        if (turnCount < 50) {
+
+        if (turnCount > 0) {
             // Let's try to build a miner.
             rc.setIndicatorString("Trying to build a miner");
             if (rc.canBuildRobot(RobotType.MINER, dir)) {
                 rc.buildRobot(RobotType.MINER, dir);
+
             }
         }
-        if (turnCount > 150){
+        if (turnCount < 10){
             // Let's try to build a soldier.
             rc.setIndicatorString("Trying to build a soldier");
             if (rc.canBuildRobot(RobotType.SOLDIER, dir)) {
                 rc.buildRobot(RobotType.SOLDIER, dir);
             }
         }
-        if (turnCount < 150){
+        if (turnCount < 20){
             // Let's try to build a builder.
             rc.setIndicatorString("Trying to build a builder");
             if (rc.canBuildRobot(RobotType.BUILDER, dir)) {
                 rc.buildRobot(RobotType.BUILDER, dir);
             }
         }
-        if (rand == 3){
+        if (turnCount < 30){
             // Let's try to build a sage.
             rc.setIndicatorString("Trying to build a sage");
             if (rc.canBuildRobot(RobotType.SAGE, dir)) {
@@ -150,6 +154,7 @@ public strictfp class RobotPlayer {
     static void runMiner(RobotController rc) throws GameActionException {
         // Try to mine on squares around us.
         MapLocation me = rc.getLocation();
+        boolean wall = true;
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 MapLocation mineLocation = new MapLocation(me.x + dx, me.y + dy);
@@ -166,6 +171,14 @@ public strictfp class RobotPlayer {
 
         // Also try to move randomly.
         Direction dir = directions[rng.nextInt(directions.length)];
+        int num = (int) (Math.random()*2);
+        if (num == 0) {
+            dir = Direction.NORTH;
+        }
+        if (num == 1) {
+            dir = Direction.WEST;
+        }
+
         if (rc.canMove(dir)) {
             rc.move(dir);
             System.out.println("I moved!");
