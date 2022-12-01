@@ -111,10 +111,10 @@ public strictfp class RobotPlayer {
     static void runArchon(RobotController rc) throws GameActionException {
         // Pick a direction to build in.
         Direction dir = directions[rng.nextInt(directions.length)];
-        int rand = (int) (Math.random()*4);
+        int rand = rng.nextInt(11);
 
 
-        if (turnCount > 0) {
+        if (0<= rand && rand < 3) {
             // Let's try to build a miner.
             rc.setIndicatorString("Trying to build a miner");
             if (rc.canBuildRobot(RobotType.MINER, dir)) {
@@ -122,14 +122,14 @@ public strictfp class RobotPlayer {
 
             }
         }
-        if (turnCount < 10){
+        if (4 <= rand && rand < 9){
             // Let's try to build a soldier.
             rc.setIndicatorString("Trying to build a soldier");
             if (rc.canBuildRobot(RobotType.SOLDIER, dir)) {
                 rc.buildRobot(RobotType.SOLDIER, dir);
             }
         }
-        if (turnCount < 20){
+        if (rand == 10){
             // Let's try to build a builder.
             rc.setIndicatorString("Trying to build a builder");
             if (rc.canBuildRobot(RobotType.BUILDER, dir)) {
