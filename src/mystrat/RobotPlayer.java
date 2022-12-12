@@ -9,6 +9,7 @@ import java.util.Random;
  * The run() method inside this class is like your main function: this is what we'll call once your robot
  * is created!
  */
+
 public strictfp class RobotPlayer {
 
     /**
@@ -17,6 +18,8 @@ public strictfp class RobotPlayer {
      * these variables are static, in Battlecode they aren't actually shared between your robots.
      */
     static int turnCount = 0;
+    static int sc = 0;
+
 
 
     /**
@@ -56,6 +59,7 @@ public strictfp class RobotPlayer {
         // You can also use indicators to save debug notes in replays.
         rc.setIndicatorString("Hello world!");
 
+
         while (true) {
             // This code runs during the entire lifespan of the robot, which is why it is in an infinite
             // loop. If we ever leave this loop and return from run(), the robot dies! At the end of the
@@ -63,7 +67,9 @@ public strictfp class RobotPlayer {
 
             turnCount += 1;  // We have now been alive for one more turn!
 
+
             System.out.println("Age: " + turnCount + "; Location: " + rc.getLocation());
+
 
             // Try/catch blocks stop unhandled exceptions, which cause your robot to explode.
             try {
@@ -111,10 +117,12 @@ public strictfp class RobotPlayer {
     static void runArchon(RobotController rc) throws GameActionException {
         // Pick a direction to build in.
         Direction dir = directions[rng.nextInt(directions.length)];
-        int rand = rng.nextInt(11);
+        int rand = rng.nextInt(20);
 
 
-        if (0<= rand && rand < 3) {
+
+
+        if (16<= rand && rand < 19) {
             // Let's try to build a miner.
             rc.setIndicatorString("Trying to build a miner");
             if (rc.canBuildRobot(RobotType.MINER, dir)) {
@@ -122,14 +130,16 @@ public strictfp class RobotPlayer {
 
             }
         }
-        if (4 <= rand && rand < 9){
+        if (0 <= rand && rand < 16){
             // Let's try to build a soldier.
             rc.setIndicatorString("Trying to build a soldier");
             if (rc.canBuildRobot(RobotType.SOLDIER, dir)) {
+                sc += 1;
+                System.out.println("there are " + sc + "soldiers on the field");
                 rc.buildRobot(RobotType.SOLDIER, dir);
             }
         }
-        if (rand == 10){
+        if (19 <= rand && rand < 20){
             // Let's try to build a builder.
             rc.setIndicatorString("Trying to build a builder");
             if (rc.canBuildRobot(RobotType.BUILDER, dir)) {
@@ -172,12 +182,24 @@ public strictfp class RobotPlayer {
         // Also try to move randomly.
         Direction dir = directions[rng.nextInt(directions.length)];
         int num = (int) (Math.random()*2);
+        int a = 0;
         if (num == 0) {
             dir = Direction.NORTH;
         }
         if (num == 1) {
             dir = Direction.WEST;
         }
+
+        if(!(rc.canMove(dir))) {
+            a = 1;
+        }
+        if (a == 1 && num == 0) {
+            dir = Direction.SOUTH;
+        }
+        if (a == 1 && num == 1) {
+            dir = Direction.EAST;
+        }
+
 
         if (rc.canMove(dir)) {
             rc.move(dir);
@@ -203,6 +225,59 @@ public strictfp class RobotPlayer {
 
         // Also try to move randomly.
         Direction dir = directions[rng.nextInt(directions.length)];
+        int num = (int) (Math.random()*2);
+        int a = 0;
+        /**
+        if (num == 0) {
+            dir = Direction.NORTH;
+        }
+        if (num == 1) {
+            dir = Direction.WEST;
+        }
+
+        if(!(rc.canMove(dir))) {
+            a = 1;
+        }
+        if (a == 1 && num == 0) {
+            dir = Direction.SOUTH;
+        }
+        if (a == 1 && num == 1) {
+            dir = Direction.EAST;
+        }
+         */
+        if (sc < 5){
+            if (num == 0) {
+                dir = Direction.SOUTH;
+            }
+            if (num == 1) {
+                dir = Direction.EAST;
+            }
+        }
+        if (sc > 5){
+            if (num == 0) {
+                dir = Direction.NORTH;
+            }
+            if (num == 1) {
+                dir = Direction.WEST;
+            }
+
+            /**
+            if(!(rc.canMove(dir))) {
+                a = 1;
+            }
+            if (a == 1 && num == 0) {
+                dir = Direction.SOUTH;
+            }
+            if (a == 1 && num == 1) {
+                dir = Direction.EAST;
+            }
+            */
+        }
+
+        System.out.println("there are afsdfdf a" + sc);
+
+
+
         if (rc.canMove(dir)) {
             rc.move(dir);
             System.out.println("I moved!");
